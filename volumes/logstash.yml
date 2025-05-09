@@ -1,0 +1,6 @@
+http.host: "0.0.0.0" # Listen on all network interfaces
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch_container:9200" ]
+
+#xpack.monitoring.elasticsearch.username: "elastic"
+#xpack.monitoring.elasticsearch.password: "nicholas145" # Make sure to set this

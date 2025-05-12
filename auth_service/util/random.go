@@ -28,6 +28,7 @@ func RandomString(maxLength int) string {
 
 func RandomInteger(min, max int64) int64 {
 
+	fmt.Printf("min: %d, max: %d\n", min, max)
 	if min > max {
 		panic("min cannot be greater than max")
 	}
@@ -47,6 +48,17 @@ func RandomAmount() int64 {
 	return RandomInteger(1, 100)
 }
 
+func pow10(n int) int64 {
+
+	res := int64(1)
+
+	for i := 0; i < n; i++ {
+		res *= 10
+	}
+
+	return res
+}
+
 func RandomEmail() string {
 	return fmt.Sprintf("%s@gmail.com", RandomOwner())
 }
@@ -61,4 +73,21 @@ func RandomHex(byteLength int) (string, error) {
 	}
 
 	return hex.EncodeToString(bytes), nil
+}
+
+// GenerateOTP generates an n-digit numeric OTP (4-8 digits recommended)
+func GenerateOTP(length int) (string, error) {
+
+	if length < 3 || length > 8 {
+
+		return "", fmt.Errorf("OTP length must be between 4 and 8 digits")
+	}
+
+	mini := int64(pow10(length - 1)) // e.g., 1000 for length=4
+	maxi := int64(pow10(length) - 1) // e.g., 9999 for length=4
+
+	otp := RandomInteger(mini, maxi)
+	
+	return fmt.Sprintf("%0*d", length, otp), nil // Ensures leading zeros
+
 }

@@ -1,6 +1,7 @@
 package sqldb
 
 import (
+	"auth_service/db/mdata"
 	"errors"
 	"fmt"
 	"gorm.io/driver/mysql"
@@ -114,9 +115,21 @@ func (f *MySQLFactory) CreateDB() (*SqlDB, error) {
 	return &SqlDB{db: tyDB}, nil
 }
 
-func (sql *SqlDB) MigrateDB(model any) error {
+func (sql *SqlDB) MigrateDB() error {
+	// Define all models that need to be migrated
+	models := []interface{}{
+		&mdata.Auth{},
+		&mdata.Session{},
+	}
 
-	return sql.db.AutoMigrate(model)
+	// Migrate all models
+	for _, model := range models {
+		if err := sql.db.AutoMigrate(model); err != nil {
+			return fmt.Errorf("failed to migrate %T: %w", model, err)
+		}
+	}
+
+	return nil
 }
 
 // InitSQLDB initializes the database using factory pattern

@@ -1,6 +1,9 @@
 package mdata
 
-import "time"
+import (
+	"github.com/google/uuid"
+	"time"
+)
 
 type Auth struct {
 	ID                     uint    `gorm:"primaryKey;autoIncrement"`
@@ -20,4 +23,19 @@ type Auth struct {
 	PasswordResetExpires   *time.Time
 	CreatedAt              time.Time `gorm:"not null;autoCreateTime"`
 	UpdatedAt              time.Time `gorm:"not null;autoUpdateTime"`
+}
+
+type Session struct {
+	ID           uuid.UUID `gorm:"type:char(36);primaryKey"`
+	Username     string    `gorm:"type:varchar(255);not null;index;uniqueIndex:index_sessions_username"`
+	RefreshToken string    `gorm:"type:varchar(255);not null;uniqueIndex"`
+	UserAgent    string    `gorm:"type:varchar(255);not null"`
+	ClientIP     string    `gorm:"type:varchar(255);not null"`
+	IsBlocked    bool      `gorm:"not null;default:false"`
+	LastUsedAt   time.Time `gorm:"not null;default:(CURRENT_TIMESTAMP)"`
+	CreatedAt    time.Time `gorm:"not null;autoCreateTime"`
+	ExpiredAt    time.Time `gorm:"not null"`
+
+	// Foreign key relationship
+	Auth Auth `gorm:"foreignKey:Username;references:Username;constraint:OnUpdate:CASCADE,onDelete:CASCADE"`
 }

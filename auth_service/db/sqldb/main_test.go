@@ -1,7 +1,6 @@
 package sqldb
 
 import (
-	"auth_service/db/mdata"
 	"auth_service/util"
 	"log"
 	"os"
@@ -34,7 +33,7 @@ func TestMain(m *testing.M) {
 	testStore = db
 
 	// Add migration to ensure table exists
-	err = db.MigrateDB(&mdata.Auth{})
+	err = db.MigrateDB()
 	if err != nil {
 		log.Fatal("Failed to migrate database:", err)
 	}
